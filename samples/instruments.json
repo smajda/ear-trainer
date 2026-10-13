@@ -1,0 +1,35 @@
+{
+  "instruments": {
+    "oboe": {
+      "58": "oboe-058-As3.wav",
+      "59": "oboe-059-B3.wav",
+      "60": "oboe-060-C4.wav",
+      "61": "oboe-061-Cs4.wav",
+      "62": "oboe-062-D4.wav",
+      "63": "oboe-063-Ds4.wav",
+      "64": "oboe-064-E4.wav",
+      "65": "oboe-065-F4.wav",
+      "66": "oboe-066-Fs4.wav",
+      "67": "oboe-067-G4.wav",
+      "68": "oboe-068-Gs4.wav",
+      "69": "oboe-069-A4.wav",
+      "70": "oboe-070-As4.wav",
+      "71": "oboe-071-B4.wav",
+      "72": "oboe-072-C5.wav",
+      "73": "oboe-073-Cs5.wav",
+      "74": "oboe-074-D5.wav",
+      "75": "oboe-075-Ds5.wav",
+      "76": "oboe-076-E5.wav",
+      "77": "oboe-077-F5.wav",
+      "78": "oboe-078-Fs5.wav",
+      "79": "oboe-079-G5.wav",
+      "80": "oboe-080-Gs5.wav",
+      "81": "oboe-081-A5.wav",
+      "82": "oboe-082-As5.wav",
+      "83": "oboe-083-B5.wav",
+      "84": "oboe-084-C6.wav",
+      "85": "oboe-085-Cs6.wav",
+      "86": "oboe-086-D6.wav"
+    }
+  }
+}

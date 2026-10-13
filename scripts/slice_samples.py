@@ -13,10 +13,13 @@ detected. When a note was played more than once, the LAST take is kept.
 
 Writes <name>-<midi>-<note><octave>.wav next to the input, e.g. oboe-070-As4.wav
 (MIDI number first so files sort in pitch order; "s" means sharp).
+Also adds the instrument to instruments.json in the output directory, which
+the app reads to find what instruments and notes are available.
 Use --dry-run to see how every segment was labelled without writing files.
 """
 
 import argparse
+import json
 import os
 import sys
 
@@ -181,6 +184,21 @@ def trim(audio, mono, sr, a, b, limit, midi):
     return clip, (a + start) / sr, (a + end) / sr
 
 
+def update_manifest(out, name, notes):
+    """Record this instrument's files in <out>/instruments.json."""
+    path = os.path.join(out, "instruments.json")
+    manifest = {"instruments": {}}
+    if os.path.exists(path):
+        with open(path) as f:
+            manifest = json.load(f)
+    manifest["instruments"][name] = {str(m): file_name(name, m) for m in notes}
+    manifest["instruments"] = dict(sorted(manifest["instruments"].items()))
+    with open(path, "w") as f:
+        json.dump(manifest, f, indent=2)
+        f.write("\n")
+    return path
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("input", help="recording of an ascending chromatic scale")
@@ -236,6 +254,7 @@ def main():
         path = os.path.join(out, file_name(name, m))
         sf.write(path, clip, sr, subtype="PCM_16")
     print(f"wrote {len(played)} files to {out}/{name}-*.wav")
+    print(f"updated {update_manifest(out, name, played)}")
 
 
 if __name__ == "__main__":

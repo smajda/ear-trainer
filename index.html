@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ear Trainer</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <main>
+    <section class="quiz" aria-live="polite">
+      <p id="status" class="status">Loading samples…</p>
+      <div id="answer" class="answer" hidden>
+        <div id="answer-interval" class="answer-interval"></div>
+        <div id="answer-full" class="answer-full"></div>
+        <div id="answer-notes" class="answer-notes"></div>
+      </div>
+      <div class="controls">
+        <button id="replay" type="button" disabled>Replay <kbd>R</kbd></button>
+        <button id="primary" type="button" class="primary" disabled>Start <kbd>Space</kbd></button>
+      </div>
+    </section>
+
+    <form id="settings" class="settings">
+      <fieldset>
+        <legend>Instrument</legend>
+        <select id="instrument" aria-label="Instrument"></select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Note range</legend>
+        <div class="range">
+          <label>Lowest <select id="range-low"></select></label>
+          <label>Highest <select id="range-high"></select></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Intervals</legend>
+        <div class="presets">
+          <button type="button" data-preset="octave">All ≤ 8ve</button>
+          <button type="button" data-preset="thirds">3rds</button>
+          <button type="button" data-preset="perfect">Perfect</button>
+          <button type="button" data-preset="clear">Clear</button>
+        </div>
+        <div id="intervals" class="interval-grid"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Direction</legend>
+        <div class="segmented">
+          <label><input type="radio" name="direction" value="up"> Up</label>
+          <label><input type="radio" name="direction" value="mixed"> Up &amp; down</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Next question</legend>
+        <div class="segmented">
+          <label><input type="radio" name="advance" value="manual"> When I press Next</label>
+          <label><input type="radio" name="advance" value="auto"> Automatically</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Timing</legend>
+        <label class="slider">Note length <output id="noteLength-out"></output>
+          <input id="noteLength" type="range" min="0.4" max="2" step="0.1"></label>
+        <label class="slider">Delay before answer <output id="revealDelay-out"></output>
+          <input id="revealDelay" type="range" min="0" max="5" step="0.5"></label>
+        <label class="slider">Answer shown for (auto) <output id="advanceDelay-out"></output>
+          <input id="advanceDelay" type="range" min="1" max="10" step="0.5"></label>
+      </fieldset>
+    </form>
+  </main>
+</body>
+</html>
