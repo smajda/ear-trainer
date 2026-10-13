@@ -264,8 +264,47 @@ The first attempt at this round announced the questions but never actually sent 
 - **Spelling:** the high note's letter follows from the interval number. Black-key low notes are spelled however avoids double sharps and flats, and tritones are labelled A4/d5 but spelled as A4.
 - **Out of scope for now:** stats and scoring, answer buttons, and any backend.
 
-## 5. Process notes
+## 5. Saving this record
+
+> ok, first, can you save a summary of this process in the repo? I want you to include what I said exactly and the questions I responded to exactly, but then fill in a brief narrative about the choices made and what we built.
+
+That produced this document, up to section 4.
+
+## 6. Building the app
+
+> sure commit and then start
+
+Since `main` now had history, the docs were committed on a new `build-app` branch, and the app was built there in the planned order:
+
+1. **Manifest:** the slicer now also writes `samples/instruments.json`, mapping each instrument's MIDI numbers to its files. That's how the app finds instruments without a server to list directories. Re-running it on the oboe recording rewrote the WAVs byte-for-byte.
+2. **Interval logic (`js/theory.js`):** the interval table, note spelling, and question picking, with no browser code, so `npm test` (Node's built-in test runner) can check it. Two of the first test expectations turned out to be wrong rather than the code. For an M7 above the F#/Gb key, `Gb → F` is simpler than `F# → E#`, which is exactly the agreed rule. Questions pick an interval first and then a low note, so a wide interval like P15 comes up as often as m2 even though it fits in far fewer places.
+3. **Playback (`js/audio.js`):** loads the samples and schedules first note → second note → chord on the audio clock, cutting each note to the chosen length with a short fade.
+4. **Interface (`index.html`, `style.css`, `js/app.js`):** the quiz card and the settings panel, saved settings, and keyboard shortcuts. A full interval name was added under the short one (e.g. "Major 6th, descending").
+5. **Checking it in a browser:** headless Chromium (via Playwright, installed outside the repo) drove the page. Every played note was traced back to its sample file, so the answers shown could be checked against what was actually played. They all matched. The run also found two bugs, both fixed:
+   - After clicking a setting, the control kept keyboard focus, so Space did nothing instead of playing the next question.
+   - When no ticked interval fit the range, the warning appeared but the previous answer stayed on screen.
+
+## 7. A port problem
+
+> i get an error at http://localhost:8000/canvas/
+
+> it redirects
+
+The local server never sent that redirect: asking it for `/` directly returned the page. So the browser was redirecting on its own, most likely because of a service worker or cached redirect left by another project that once ran on `localhost:8000`.
+
+> ok pick a different port?
+
+The app moved to port 8123, and `npm start` now uses it.
+
+> ok cool. please commit
+
+> oh and update the process doc
+
+The app was committed on `build-app`, and this section was added.
+
+## 8. Process notes
 
 - **Repeated takes:** the request's own wording ("repeated if the first take was bad") set the rule of keeping the last take.
 - **Reading the pitch:** the app's main assumption, that the notes go up one semitone at a time, was also what made the pitch detection reliable.
 - **When the questions were asked:** they were only asked where an answer would change what got built: file naming, and the app's design. Smaller choices (e.g. not repeating the same question twice in a row, the `instruments.json` manifest, keyboard shortcuts) were made as defaults and stated in the plan instead.
+- **Testing:** the automated browser check could confirm which samples played and when, but not how they sound. Listening is still a manual check.
