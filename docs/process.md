@@ -302,7 +302,23 @@ The app moved to port 8123, and `npm start` now uses it.
 
 The app was committed on `build-app`, and this section was added.
 
-## 8. Process notes
+## 8. Merging and deploying
+
+> yes, merge
+
+`build-app` was merged into `main`. Because `main` had no new commits of its own, git just moved `main` forward, with no separate merge commit.
+
+> so if i want to deploy this to a public server, give me an rsync script that only includes the appropriate files
+
+`scripts/deploy.sh user@host:/path [--dry-run]` uploads only what the site needs: `index.html`, `style.css`, `js/*.js`, `samples/instruments.json`, and samples matching the slicer's naming pattern (`name-NNN-note.wav`). So samples for future instruments are included automatically, while full recordings like `oboe.wav`, plus docs, scripts and tests, stay local. That's 35 files, about 10 MB.
+
+It was tested by deploying to a local folder, which led to two adjustments:
+- **Permissions:** the first version set permissions with rsync's `--chmod`, but the `openrsync` that ships with macOS doesn't support it. The script copies the local permissions (`-p`) instead, which are already `644`/`755`.
+- **Deletion:** with `--delete` plus a catch-all exclude, rsync only deletes server files that match the app's own patterns. An outdated sample was removed, while an unrelated file in the destination survived, and the script's comment was updated to say so.
+
+> commit it and update the process doc
+
+## 9. Process notes
 
 - **Repeated takes:** the request's own wording ("repeated if the first take was bad") set the rule of keeping the last take.
 - **Reading the pitch:** the app's main assumption, that the notes go up one semitone at a time, was also what made the pitch detection reliable.
