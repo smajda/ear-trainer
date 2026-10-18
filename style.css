@@ -23,6 +23,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
@@ -65,6 +66,7 @@ main {
 
 .answer-interval { font-size: 4rem; font-weight: 700; line-height: 1.1; }
 .answer-full { color: var(--muted); }
+.answer-chord { font-size: 1.2rem; margin-top: 8px; }
 .answer-notes { font-size: 1.6rem; margin-top: 8px; }
 
 .controls { display: flex; gap: 12px; margin-top: 20px; }
@@ -102,6 +104,7 @@ select {
 
 .range { display: flex; gap: 16px; flex-wrap: wrap; }
 .range label { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 0.9rem; }
+.chord-pick { margin-top: 10px; }
 
 .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
 .presets button { font-size: 0.9rem; padding: 6px 10px; }

@@ -256,3 +256,19 @@ Allowing 7th chords in fixed mode raised the question of whether key mode should
   3. The answer is revealed, e.g. **m7**, *Minor 7th*, *G over A minor*, *A2 C3 E3 + G4*.
   - The existing replay, pacing and timing settings still apply.
 - **Out of scope for now:** minor keys, choosing individual scale degrees, inversions, diatonic 7th chords in key mode, and chord-tone/tension names (9, #11, 13).
+
+## 7. Building it
+
+> yes, commit and start building
+
+The planning notes were committed on a new `chord-mode` branch, and the mode was built there:
+
+1. **Piano samples (`scripts/fetch_piano.sh`):** this downloads the Salamander notes that Tone.js hosts. They're 16-second stereo MP3s, about 10 dB quieter than the oboe. The script cuts each one to 5 seconds of mono WAV with a 1-second fade, and adds `piano` to `instruments.json`. That's 17 notes from C2 to C6, 7.2 MB in total. They're named `piano-NNN-Note.wav` like the oboe, so `deploy.sh` uploads them without any changes. The script had to avoid associative arrays, because macOS ships bash 3.
+2. **Pitch shifting (`js/audio.js`):** when an instrument has no sample for a note, the player now plays the nearest sample at a different speed. Salamander has a note every minor third, so a note is never shifted by more than one semitone. The app now treats every note between an instrument's lowest and highest sample as playable. That makes no difference for the oboe, which has every note.
+3. **Chord logic (`js/chords.js`):** chord types, the major keys, the diatonic triads, root-position voicing, and question picking. Like `theory.js`, it has no browser code, and it has its own tests (`tests/chords.test.js`). Some details:
+   - Roots sit between F2 and E3. The plan said chords would sit below the oboe's range, but a chord on a high root (E major, or Emaj7 up to D♯4) reaches into the oboe's lowest notes. The rule that matters still holds: the top note is always above the chord.
+   - In key mode, the top note is spelled by its letter in the key. So over B diminished in C, the tritone is F, not E♯, even though the label is A4/d5.
+   - In fixed mode, a black-key root is spelled to keep the chord simple (D♭ major but C♯ minor), the same rule interval mode uses for its low note.
+   - Questions pick an interval first, then a chord and top note, so each ticked interval is equally likely, as in interval mode.
+4. **Interface:** a Mode switch at the top of the settings. In chord mode, the Chords section appears (key, or root and chord type) and Direction is hidden. The two modes keep separate interval ticks. The reveal adds a line like *G over A minor*. Changing mode, key or chord means the next question starts with the cadence again (in key mode).
+5. **Checking it:** headless Chromium couldn't start inside this session's sandbox, because the sandbox blocks Chrome's Mach-port setup. Instead, the real `app.js` was run under Node with jsdom and a fake AudioContext that logged every note it was asked to play. The questions all matched their answers across key mode (C and E♭) and fixed mode (Dm7, D♭). The cadence played only before the first question and after a key change. The "nothing fits" message and switching back to interval mode also worked. How the piano and oboe balance (`PIANO_LEVEL` in `audio.js`) still has to be checked by ear.

@@ -30,6 +30,25 @@
       "84": "oboe-084-C6.wav",
       "85": "oboe-085-Cs6.wav",
       "86": "oboe-086-D6.wav"
+    },
+    "piano": {
+      "36": "piano-036-C2.wav",
+      "39": "piano-039-Ds2.wav",
+      "42": "piano-042-Fs2.wav",
+      "45": "piano-045-A2.wav",
+      "48": "piano-048-C3.wav",
+      "51": "piano-051-Ds3.wav",
+      "54": "piano-054-Fs3.wav",
+      "57": "piano-057-A3.wav",
+      "60": "piano-060-C4.wav",
+      "63": "piano-063-Ds4.wav",
+      "66": "piano-066-Fs4.wav",
+      "69": "piano-069-A4.wav",
+      "72": "piano-072-C5.wav",
+      "75": "piano-075-Ds5.wav",
+      "78": "piano-078-Fs5.wav",
+      "81": "piano-081-A5.wav",
+      "84": "piano-084-C6.wav"
     }
   }
 }

@@ -2,7 +2,9 @@
 
 An interval ear-training web app that uses real recordings of your own instrument. Each question plays two notes, one after the other and then together, and then shows the interval and how the notes are spelled (e.g. **M3: Bb3 → D4**). You can choose the instrument, note range, intervals, direction, and timing. Settings are saved in the browser.
 
-It's a static site (plain HTML/JS/CSS and the Web Audio API) with no build step and no backend. It currently ships with an oboe. For the story of how it was built, see [docs/process.md](docs/process.md).
+**Chord mode** ("Over a chord") plays a piano chord, then your instrument enters on top while the chord rings, and shows the note's interval above the chord's root (e.g. **m7: G over A minor**). The chords either come from a major key (its seven triads, with the top note always in the key and a I–IV–V–I cadence first), or you fix one chord (any root; major, minor, diminished, augmented, or a 7th chord) and any interval can go on top. See [docs/chord-mode.md](docs/chord-mode.md) for how it was planned.
+
+It's a static site (plain HTML/JS/CSS and the Web Audio API) with no build step and no backend. It currently ships with an oboe and a piano. For the story of how it was built, see [docs/process.md](docs/process.md).
 
 ## Running locally
 
@@ -14,6 +16,10 @@ npm test         # runs the interval/spelling tests (Node's built-in runner)
 `npm start` just runs `python3 -m http.server 8123`. Any static server works, but the page has to be served over HTTP, because opening `index.html` directly from disk can't load the samples.
 
 To deploy, run `scripts/deploy.sh user@host:/path/to/site --dry-run` first, then run it again without `--dry-run`. It uploads only the files the site needs.
+
+## The piano
+
+The chord-mode piano is the [Salamander Grand Piano](https://archive.org/details/SalamanderGrandPianoV3) by Alexander Holm, licensed [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/). `scripts/fetch_piano.sh` downloads it (as hosted for Tone.js), cuts each note to 5 seconds of mono WAV, and adds it to `samples/instruments.json`. Salamander has a note every minor third from C2 to C6; the app pitch-shifts the nearest sample for the notes in between. The piano can also be chosen as the instrument in interval mode.
 
 ## Adding an instrument
 

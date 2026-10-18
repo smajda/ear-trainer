@@ -14,6 +14,7 @@
       <div id="answer" class="answer" hidden>
         <div id="answer-interval" class="answer-interval"></div>
         <div id="answer-full" class="answer-full"></div>
+        <div id="answer-chord" class="answer-chord" hidden></div>
         <div id="answer-notes" class="answer-notes"></div>
       </div>
       <div class="controls">
@@ -24,12 +25,33 @@
 
     <form id="settings" class="settings">
       <fieldset>
-        <legend>Instrument</legend>
+        <legend>Mode</legend>
+        <div class="segmented">
+          <label><input type="radio" name="mode" value="intervals"> Intervals</label>
+          <label><input type="radio" name="mode" value="chord"> Over a chord</label>
+        </div>
+      </fieldset>
+
+      <fieldset id="chord-settings">
+        <legend>Chords</legend>
+        <div class="segmented">
+          <label><input type="radio" name="chordSource" value="key"> In a key</label>
+          <label><input type="radio" name="chordSource" value="fixed"> Fixed chord</label>
+        </div>
+        <div class="range chord-pick">
+          <label data-source="key">Key <select id="key"></select></label>
+          <label data-source="fixed">Root <select id="chord-root"></select></label>
+          <label data-source="fixed">Chord <select id="chord-type"></select></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend id="instrument-legend">Instrument</legend>
         <select id="instrument" aria-label="Instrument"></select>
       </fieldset>
 
       <fieldset>
-        <legend>Note range</legend>
+        <legend id="range-legend">Note range</legend>
         <div class="range">
           <label>Lowest <select id="range-low"></select></label>
           <label>Highest <select id="range-high"></select></label>
@@ -47,7 +69,7 @@
         <div id="intervals" class="interval-grid"></div>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="direction-settings">
         <legend>Direction</legend>
         <div class="segmented">
           <label><input type="radio" name="direction" value="up"> Up</label>
