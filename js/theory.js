@@ -1,12 +1,12 @@
 // Intervals, note spelling and question picking. No DOM or audio here, so it
 // can be tested with `node --test`.
 
-const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
-const LETTER_PC = [0, 2, 4, 5, 7, 9, 11];
+export const LETTERS = ["C", "D", "E", "F", "G", "A", "B"];
+export const LETTER_PC = [0, 2, 4, 5, 7, 9, 11];
 
 // For black keys spelled either way with equally simple results, use the
 // spelling most common in key signatures.
-const PREFERRED_BLACK = { 1: "C#", 3: "Eb", 6: "F#", 8: "Ab", 10: "Bb" };
+export const PREFERRED_BLACK = { 1: "C#", 3: "Eb", 6: "F#", 8: "Ab", 10: "Bb" };
 
 // semitones → interval. `number` is the interval's size in letter names
 // (3 for a third), which decides how the upper note is spelled. The tritones
@@ -41,7 +41,7 @@ export const INTERVALS = [
 
 // A spelled note: letter index (0 = C), accidental (-2..2) and octave.
 // The octave belongs to the letter, so B#3 sounds the same as C4.
-function midiOf({ letter, accidental, octave }) {
+export function midiOf({ letter, accidental, octave }) {
   return 12 * (octave + 1) + LETTER_PC[letter] + accidental;
 }
 
