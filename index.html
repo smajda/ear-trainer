@@ -36,9 +36,9 @@
           <h2 id="answer-title" class="text-4xl font-bold"></h2>
           <p id="answer-subtitle" class="mt-1 text-xl text-base-content/70"></p>
           <div class="tabs tabs-box tabs-sm mx-auto mt-5 w-fit" role="tablist" aria-label="Show the answer as">
-            <input type="radio" name="answerView" class="tab" value="staff" aria-label="Staff">
-            <input type="radio" name="answerView" class="tab" value="keyboard" aria-label="Keyboard">
-            <input type="radio" name="answerView" class="tab" value="notes" aria-label="Notes">
+            <label class="tab"><input type="radio" name="answerView" value="staff" class="sr-only">Staff</label>
+            <label class="tab"><input type="radio" name="answerView" value="keyboard" class="sr-only">Keyboard</label>
+            <label class="tab"><input type="radio" name="answerView" value="notes" class="sr-only">Notes</label>
           </div>
           <div id="answer-view" class="mt-4 min-h-28"></div>
         </div>

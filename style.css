@@ -17,6 +17,8 @@
 @media (hover: none) { kbd { display: none; } }
 
 /* answer views */
+/* three tabs always fit; a utility class can't override unlayered daisyUI */
+.tabs { flex-wrap: nowrap; }
 .staff-chord .abcjs-note.abcjs-v0, .staff-chord .abcjs-note.abcjs-v0 path { fill: var(--color-primary); }
 /* a keyboard looks like a keyboard in either theme, so these colours are fixed */
 .keyboard .key { stroke: #8a8a8a; stroke-width: 0.6; }
