@@ -15,7 +15,7 @@ npm test         # runs the interval/spelling tests (Node's built-in runner)
 
 `npm start` just runs `python3 -m http.server 8123`. Any static server works, but the page has to be served over HTTP, because opening `index.html` directly from disk can't load the samples.
 
-To deploy, run `scripts/deploy.sh user@host:/path/to/site --dry-run` first, then run it again without `--dry-run`. It uploads only the files the site needs.
+To deploy, run `scripts/deploy.sh user@host:/path/to/site --dry-run` first, then run it again without `--dry-run`. It uploads only the files the site needs, and adds a version (`?v=<hash>`) to every script, stylesheet and module import so browsers load the new code instead of a cached copy.
 
 ## The piano
 
