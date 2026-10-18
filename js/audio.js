@@ -8,6 +8,8 @@ const PIANO_LEVEL = 0.8;  // per chord note; the piano samples are quieter than 
 export class Player {
   constructor(baseUrl = "samples/") {
     this.baseUrl = baseUrl;
+    // iOS mutes Web Audio in silent mode unless the page declares playback.
+    if (navigator.audioSession) navigator.audioSession.type = "playback";
     this.ctx = new AudioContext();
     this.buffers = new Map(); // instrument → Map(midi → AudioBuffer)
     this.playing = [];
