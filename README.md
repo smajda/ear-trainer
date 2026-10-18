@@ -4,7 +4,7 @@ An interval ear-training web app that uses real recordings of your own instrumen
 
 **Chord mode** ("Over a chord") plays a piano chord, then your instrument enters on top while the chord rings, and shows the note's interval above the chord's root (e.g. **m7: G over A minor**). The chords either come from a major key (its seven triads, with the top note always in the key and a I–IV–V–I cadence first), or you fix one chord (any root; major, minor, diminished, augmented, or a 7th chord) and any interval can go on top. See [docs/chord-mode.md](docs/chord-mode.md) for how it was planned.
 
-It's a static site (plain HTML/JS/CSS and the Web Audio API) with no build step and no backend. It currently ships with an oboe and a piano. For the story of how it was built, see [docs/process.md](docs/process.md).
+It's a static site (plain HTML/JS/CSS and the Web Audio API) with no build step and no backend. The styling uses [daisyUI](https://daisyui.com) 5.7.47 and the [Tailwind CSS](https://tailwindcss.com) 4.3.3 browser build, both stored in `vendor/` so the app works offline. It currently ships with an oboe and a piano. For the story of how it was built, see [docs/process.md](docs/process.md).
 
 ## Running locally
 

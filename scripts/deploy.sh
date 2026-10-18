@@ -4,7 +4,8 @@
 #   scripts/deploy.sh user@host:/var/www/ear-trainer            # deploy
 #   scripts/deploy.sh user@host:/var/www/ear-trainer --dry-run  # list what would change
 #
-# Only the app is uploaded: index.html, style.css, js/*.js,
+# Only the app is uploaded: index.html, style.css, js/*.js, vendor/ (daisyUI
+# and Tailwind),
 # samples/instruments.json and the sliced samples (name-NNN-note.wav).
 # Source recordings (e.g. samples/oboe.wav), docs, scripts and tests stay local.
 #
@@ -28,6 +29,8 @@ rsync -rtpvz --delete "$@" \
   --include='/style.css' \
   --include='/js/' \
   --include='/js/*.js' \
+  --include='/vendor/' \
+  --include='/vendor/*' \
   --include='/samples/' \
   --include='/samples/instruments.json' \
   --include='/samples/*-[0-9][0-9][0-9]-*.wav' \

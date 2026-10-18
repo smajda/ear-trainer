@@ -56,6 +56,18 @@ function loadSettings() {
 
 function saveSettings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  renderSummary();
+}
+
+/** The one-line summary shown above the quiz, e.g. "Chord mode, key of C major". */
+function renderSummary() {
+  let text = "Interval mode";
+  if (chordMode()) {
+    text = settings.chordSource === "key"
+      ? `Chord mode, key of ${prettyKey(KEYS[settings.key])} major`
+      : `Chord mode, fixed ${chordName(chordChoices(settings)[0])}`;
+  }
+  $("summary").textContent = text;
 }
 
 const chordMode = () => settings.mode === "chord";
@@ -112,18 +124,18 @@ function renderIntervals() {
   const fits = chordMode() ? chordCandidates(all) : candidates(all);
   $("intervals").replaceChildren(
     ...list.map((iv) => {
-      const label = document.createElement("label");
-      label.title = intervalName(iv);
       const box = document.createElement("input");
       box.type = "checkbox";
+      box.className = "btn btn-sm";
       box.value = iv.semitones;
       box.checked = settings[intervalsKey()].includes(iv.semitones);
-      label.append(box, iv.name);
+      box.setAttribute("aria-label", iv.name);
+      box.title = intervalName(iv);
       if (!fits.has(iv.semitones)) {
-        label.classList.add("unplayable");
-        label.title += chordMode() ? " (doesn't fit over these chords in the note range)" : " (doesn't fit in the note range)";
+        box.classList.add("unplayable");
+        box.title += chordMode() ? " (doesn't fit over these chords in the note range)" : " (doesn't fit in the note range)";
       }
-      return label;
+      return box;
     }),
   );
 }
@@ -389,6 +401,10 @@ function bindQuiz() {
   $("replay").addEventListener("click", replay);
   document.addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+    if (e.key === "Escape") {
+      $("settings-drawer").checked = false;
+      return;
+    }
     // leave keys alone while a form control has focus; a focused button
     // already handles Space itself
     if (e.target.closest("input, select, textarea")) return;
