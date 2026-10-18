@@ -15,3 +15,14 @@
 #intervals .unplayable { opacity: 0.4; }
 
 @media (hover: none) { kbd { display: none; } }
+
+/* answer views */
+.staff-chord .abcjs-note.abcjs-v0, .staff-chord .abcjs-note.abcjs-v0 path { fill: var(--color-primary); }
+/* a keyboard looks like a keyboard in either theme, so these colours are fixed */
+.keyboard .key { stroke: #8a8a8a; stroke-width: 0.6; }
+.keyboard .white { fill: #fafafa; }
+.keyboard .black { fill: #1f1f1f; }
+.keyboard .white.lower { fill: #a3a3a3; }
+.keyboard .black.lower { fill: #737373; }
+.keyboard .top { fill: var(--color-primary); }
+.keyboard .key-label { font-size: 6px; fill: #737373; }

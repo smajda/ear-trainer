@@ -1,8 +1,10 @@
-import { INTERVALS, candidates, fullName, keyName, noteName, pickQuestion, spellInterval, spellings } from "./theory.js";
+import { INTERVALS, candidates, fullName, keyName, pickQuestion, spellings } from "./theory.js";
 import {
   CHORD_INTERVALS, CHORD_TYPES, KEYS, cadence, chordCandidates, chordChoices, chordName, pickChordQuestion, pitchName,
 } from "./chords.js";
 import { Player } from "./audio.js";
+import { describe } from "./display.js";
+import { VIEWS } from "./views.js";
 
 const STORAGE_KEY = "ear-trainer-settings";
 const PRESETS = {
@@ -18,6 +20,7 @@ const DEFAULTS = {
   chordRoot: 0,
   chordType: "maj",
   chordIntervals: PRESETS.octave,
+  answerView: "staff", // or "keyboard", "notes"
   instrument: null,
   low: null,
   high: null,
@@ -37,6 +40,7 @@ let settings;
 let available = new Set(); // MIDI notes the current instrument can play
 let ready = false;
 let needCadence = true; // play the key's cadence before the next chord question
+let answer = null; // the revealed answer, so it can be redrawn in another view
 
 // quiz state
 let question = null;
@@ -154,6 +158,7 @@ function renderSettings() {
   $("chord-root").value = settings.chordRoot;
   $("chord-type").value = settings.chordType;
   document.querySelector(`input[name=mode][value=${settings.mode}]`).checked = true;
+  document.querySelector(`input[name=answerView][value=${settings.answerView}]`).checked = true;
   document.querySelector(`input[name=chordSource][value=${settings.chordSource}]`).checked = true;
   showMode();
   document.querySelector(`input[name=direction][value=${settings.direction}]`).checked = true;
@@ -340,20 +345,10 @@ function scheduleReveal(seconds) {
 }
 
 function reveal() {
-  if (chordMode()) {
-    const { interval, chord, chordNotes, top } = question;
-    $("answer-interval").textContent = interval.name;
-    $("answer-full").textContent = intervalName(interval);
-    $("answer-chord").textContent = `${pitchName(top)} over ${chordName(chord)}`;
-    $("answer-notes").textContent = `${chordNotes.map((n) => noteName(n)).join(" ")} + ${noteName(top)}`;
-  } else {
-    const { interval, low, high } = spellInterval(question.lowMidi, question.semitones);
-    const [first, second] = question.descending ? [high, low] : [low, high];
-    $("answer-interval").textContent = interval.name;
-    $("answer-full").textContent = fullName(interval) + (question.descending ? ", descending" : "");
-    $("answer-notes").textContent = `${noteName(first)} → ${noteName(second)}`;
-  }
-  $("answer-chord").hidden = !chordMode();
+  answer = describe(question, settings.mode);
+  $("answer-title").textContent = answer.title;
+  $("answer-subtitle").textContent = answer.subtitle;
+  VIEWS[settings.answerView]($("answer-view"), answer);
   $("answer").hidden = false;
   phase = "revealed";
   setStatus("");
@@ -397,6 +392,15 @@ async function onPrimary() {
 }
 
 function bindQuiz() {
+  for (const tab of document.querySelectorAll("input[name=answerView]")) {
+    tab.addEventListener("change", () => {
+      settings.answerView = tab.value;
+      saveSettings();
+      if (answer) VIEWS[settings.answerView]($("answer-view"), answer);
+    });
+    // after a mouse click, drop focus so Space goes back to the quiz
+    tab.addEventListener("click", (e) => e.detail > 0 && tab.blur());
+  }
   $("primary").addEventListener("click", onPrimary);
   $("replay").addEventListener("click", replay);
   document.addEventListener("keydown", (e) => {

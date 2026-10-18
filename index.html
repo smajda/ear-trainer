@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="vendor/daisyui.css">
   <link rel="stylesheet" href="style.css">
   <script src="vendor/tailwindcss-browser.js"></script>
+  <script src="vendor/abcjs-basic-min.js"></script>
   <script type="module" src="js/app.js"></script>
 </head>
 <body class="min-h-screen bg-base-200">
@@ -32,10 +33,14 @@
       <div class="card-body min-h-80 justify-between gap-6 text-center">
         <p id="status" class="min-h-6 text-base-content/60">Loading samples…</p>
         <div id="answer" hidden>
-          <div id="answer-interval" class="text-6xl font-bold"></div>
-          <div id="answer-full" class="text-base-content/60"></div>
-          <div id="answer-chord" class="mt-2 text-xl" hidden></div>
-          <div id="answer-notes" class="mt-2 text-2xl"></div>
+          <h2 id="answer-title" class="text-4xl font-bold"></h2>
+          <p id="answer-subtitle" class="mt-1 text-xl text-base-content/70"></p>
+          <div class="tabs tabs-box tabs-sm mx-auto mt-5 w-fit" role="tablist" aria-label="Show the answer as">
+            <input type="radio" name="answerView" class="tab" value="staff" aria-label="Staff">
+            <input type="radio" name="answerView" class="tab" value="keyboard" aria-label="Keyboard">
+            <input type="radio" name="answerView" class="tab" value="notes" aria-label="Notes">
+          </div>
+          <div id="answer-view" class="mt-4 min-h-28"></div>
         </div>
         <div class="flex gap-3">
           <button id="replay" type="button" class="btn btn-lg flex-1" disabled>Replay <kbd class="kbd kbd-sm">R</kbd></button>

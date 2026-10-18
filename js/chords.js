@@ -23,7 +23,7 @@ export const CHORD_TYPES = {
 
 // Major keys by the tonic's pitch class, spelled the way they're usually written.
 export const KEYS = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
-const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
+export const MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11];
 const DEGREES = [
   { numeral: "I", type: "maj" },
   { numeral: "ii", type: "min" },
@@ -38,10 +38,10 @@ const DEGREES = [
 // high enough that a close-voiced chord doesn't sound muddy.
 const LOWEST_ROOT = 41;
 
-const mod12 = (n) => ((n % 12) + 12) % 12;
+export const mod12 = (n) => ((n % 12) + 12) % 12;
 
 /** Spell `midi` using the given letter, e.g. 60 as B → B♯3. */
-function spellAt(midi, letter) {
+export function spellAt(midi, letter) {
   let accidental = mod12(midi - LETTER_PC[letter]);
   if (accidental > 6) accidental -= 12;
   const octave = (midi - LETTER_PC[letter] - accidental) / 12 - 1;
@@ -54,7 +54,7 @@ export function pitchName(note, opts) {
 }
 
 /** The key's tonic as { letter, accidental }. */
-function tonicOf(key) {
+export function tonicOf(key) {
   const [letter, acc] = KEYS[key];
   return { letter: LETTERS.indexOf(letter), accidental: { "#": 1, b: -1 }[acc] ?? 0 };
 }
@@ -160,13 +160,15 @@ export function pickChordQuestion(settings, previous = null, random = Math.rando
   const matching = fresh.filter((o) => o.semitones === semitones);
   const { chord, topMidi } = matching[Math.floor(random() * matching.length)];
   const { midis, notes } = voice(chord);
+  const key = settings.chordSource === "key" ? settings.key : null;
   return {
+    key, // null for a fixed chord
     semitones,
     interval: INTERVALS[semitones],
     chord,
     chordMidis: midis,
     chordNotes: notes,
     topMidi,
-    top: spellTop(chord, topMidi, semitones, settings.chordSource === "key" ? settings.key : null),
+    top: spellTop(chord, topMidi, semitones, key),
   };
 }
