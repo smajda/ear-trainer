@@ -272,3 +272,26 @@ The planning notes were committed on a new `chord-mode` branch, and the mode was
    - Questions pick an interval first, then a chord and top note, so each ticked interval is equally likely, as in interval mode.
 4. **Interface:** a Mode switch at the top of the settings. In chord mode, the Chords section appears (key, or root and chord type) and Direction is hidden. The two modes keep separate interval ticks. The reveal adds a line like *G over A minor*. Changing mode, key or chord means the next question starts with the cadence again (in key mode).
 5. **Checking it:** headless Chromium couldn't start inside this session's sandbox, because the sandbox blocks Chrome's Mach-port setup. Instead, the real `app.js` was run under Node with jsdom and a fake AudioContext that logged every note it was asked to play. The questions all matched their answers across key mode (C and E♭) and fixed mode (Dm7, D♭). The cadence played only before the first question and after a key change. The "nothing fits" message and switching back to interval mode also worked. How the piano and oboe balance (`PIANO_LEVEL` in `audio.js`) still has to be checked by ear.
+
+## 8. Trying it
+
+> looks like the old process is still running how do i kill it so i can npm start this one
+
+The `npm start` server from the earlier session was still listening on port 8123, so the answer was `kill $(lsof -ti tcp:8123)`. It served the same folder, though, so it could have been left running.
+
+> ok, some issues: the key, root, and chord selections are empty.
+
+The code did fill those dropdowns. Run under jsdom, they had 12, 12 and 8 options. The browser had loaded the new `index.html` but kept a cached copy of the old `app.js`, which knows nothing about the new dropdowns. `python -m http.server` sends no cache headers, so browsers guess how long to keep files. A hard refresh fixed it.
+
+> yeah that was it. ok, this cool. commit this and then i have some ui stuff to suggest
+
+Chord mode was committed on `chord-mode`. The UI work that followed is recorded in [ui.md](ui.md). It changed where chord mode's settings live: they're now in a settings drawer, and the page header shows a summary like "Chord mode, key of C major". The chord-mode behaviour described above is unchanged.
+
+## 9. Still open
+
+To come back to:
+
+- **Balance:** the piano/oboe balance (`PIANO_LEVEL` in `js/audio.js`, currently 0.8 per chord note) hasn't been checked carefully by ear.
+- **Voicing:** chords on high roots (E major, Emaj7 up to D♯4) reach into the oboe's lowest notes. The top note is always above the chord, but the plan's "below the oboe's range" isn't strictly true.
+- **Cadence:** it plays when the mode, key or chord source changes, not on a Start button (the app has none). Whether it should also be available on demand, or before every question, is still open.
+- **Left out of the plan:** minor keys, choosing individual scale degrees, inversions, diatonic 7th chords in key mode, and chord-tone/tension names (9, ♯11, 13).
